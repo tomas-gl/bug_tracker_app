@@ -17,11 +17,11 @@ $('#register').on('click', function(){
     $.ajax({
         type: 'GET',
         url: `${URL_API}/signup/${user.user_name}/${user.password}`,
-        // url: "http://greenvelvet.alwaysdata.net/bugTracker/api/user1/testtest",
         data: user,
         dataType: "json",
         success: function(data){
             console.log('success', data);
+            window.location.href="index.html"
         },
         error: function(error){
             console.log('error saving user', error);
