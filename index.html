@@ -25,7 +25,7 @@
                             <span class="w-100 bg-dark d-inline-block p-2 pointer" onclick="getAllBugs()">Liste complète</span>
                         </div>
                         <div class="col-6 col-md-3">
-                            <span class="w-100 d-inline-block p-2 pointer">A traiter</span>
+                            <span class="w-100 d-inline-block p-2 pointer" onclick="getUserBugs()">A traiter</span>
                         </div>
                         <div class="col-6 col-md-3 mt-2 mt-md-0">
                             <a href="add.html" class="w-100 bg-success d-inline-block p-2 text-decoration-none text-white pointer">Ajouter</a>
@@ -50,22 +50,6 @@
                             </tr>
                             </thead>
                             <tbody id="bugsList">
-                            <tr id="bugsList">
-                                <!-- <th scope="row">
-                                    <span class="d-block">Titre du bug</span>
-                                    <small>Description</small>
-                                </th>
-                                <th class="text-center">Date</th>
-                                <th class="text-center">Développeur</th>
-                                <th class="text-center">
-                                    <select class="form-select mx-auto" style="width: 150px;">
-                                        <option value="0">Non traité</option>
-                                        <option value="1">En cours</option>
-                                        <option value="2">Traité</option>
-                                    </select>
-                                </th>
-                                <th class="text-center">Supprimer</th> -->
-                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -101,7 +85,7 @@
                 })
 
                 getAllBugs();
-                getUserBugs();
+                // getUserBugs();
                 // Get bugs list
             });
         </script>

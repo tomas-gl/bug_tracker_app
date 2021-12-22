@@ -45,10 +45,15 @@ function login(){
         data: user,
         dataType: "json",
         success: function(data){
-            console.log('success', data.result);
+            console.log('success', data.result.status);
             sessionStorage.setItem("userToken", data.result.token);
             sessionStorage.setItem("userId", data.result.id);
-            window.location.href="index.html"
+            if(data.result.status == "failure"){
+                alert("Nom d'utilisateur ou mot de passe incorrect");
+            }
+            else if(data.result.status == "done"){
+                window.location.href="index.html"
+            }
         },
         error: function(error){
             console.log('error login user', error);
@@ -83,7 +88,10 @@ function getAllBugs(){
         dataType: "json",
         success: function(data){
             console.log('success', 'all bugs list: ', data.result.bug);
+            $('#bugsList').html('');
             data.result.bug.forEach(el => {
+                var d = new Date(parseInt(el.timestamp)*1000);
+                el.timestamp = d.toLocaleString('fr-FR');
                 $('#bugsList')
                 .append(
                     '<tr>'+
@@ -96,8 +104,8 @@ function getAllBugs(){
                         '<th class="text-center">'+
                         '<select class="form-select mx-auto" style="width: 150px;">'+
                             `<option ${el.state == 0 ? 'selected' : ''} value="0">Non traité</option>`+
-                            `<option ${el.state == 1 ? 'selected' : ''} value="0">Non traité</option>`+
-                            `<option ${el.state == 2 ? 'selected' : ''} value="0">Non traité</option>`+
+                            `<option ${el.state == 1 ? 'selected' : ''} value="0">En cours</option>`+
+                            `<option ${el.state == 2 ? 'selected' : ''} value="0">Traité</option>`+
                         '</select>'+
                         '</th>'+
                         '<th class="text-center">Supprimer</th>'+
@@ -120,6 +128,30 @@ function getUserBugs(){
         dataType: "json",
         success: function(data){
             console.log('success', 'user bugs list: ', data.result.bug);
+             $('#bugsList').html('');
+            data.result.bug.forEach(el => {
+                var d = new Date(parseInt(el.timestamp)*1000);
+                el.timestamp = d.toLocaleString('fr-FR');
+                $('#bugsList')
+                .append(
+                    '<tr>'+
+                        '<th scope="row">'+
+                            `<span class="d-block">${el.title}</span>`+
+                            `<small>${el.description}</small>`+
+                        '</th>'+
+                        `<th class="text-center">${el.timestamp}</th>`+
+                        `<th class="text-center">${el.user_id}</th>`+
+                        '<th class="text-center">'+
+                        '<select class="form-select mx-auto" style="width: 150px;">'+
+                            `<option ${el.state == 0 ? 'selected' : ''} value="0">Non traité</option>`+
+                            `<option ${el.state == 1 ? 'selected' : ''} value="0">En cours</option>`+
+                            `<option ${el.state == 2 ? 'selected' : ''} value="0">Traité</option>`+
+                        '</select>'+
+                        '</th>'+
+                        '<th class="text-center">Supprimer</th>'+
+                    '</tr>'
+                );
+            });
         },
         error: function(error){
             console.log('error saving user', error);
