@@ -159,6 +159,33 @@ function getUserBugs(){
     })
 }
 
+// Save a bug
+function saveBug(){
+    var bugData = {
+        title: $("#input_titre").val(),
+        description: $("#input_description").val()
+    };
+    console.log(bugData);
+    $.ajax({
+        type: 'POST',
+        url: `${URL_API}/add/${userToken}/${userId}`,
+        data: JSON.stringify( { "title": bugData.title, "description": bugData.description }),
+        dataType: "json",
+        success: function(data){
+            console.log('success', data.result.status);
+            if(data.result.status == "failure"){
+                alert("Error saving bug");
+            }
+            else if(data.result.status == "done"){
+                window.location.href="index.html"
+            }
+        },
+        error: function(error){
+            console.log('error saving bug', error);
+        }
+    })
+}
+
 
 // $(function (){
 
