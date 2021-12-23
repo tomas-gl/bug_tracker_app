@@ -241,6 +241,12 @@ function editState(){
         dataType: "json",
         success: function(data){
             console.log('success', data.result);
+            if(completeListButton.classList.contains("bg-dark")){
+                getAllBugs();
+            }
+            else{
+                getUserBugs();
+            }
         },
         error: function(error){
             console.log('error editing bug', error);
