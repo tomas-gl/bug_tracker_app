@@ -15,7 +15,7 @@ fetch(`${URL_API}/ping`)
 
 
 $('#register').on('click', function(){
-    var user = {
+    let user = {
         user_name: $("#input_username").val(),
         password: $("#input_password").val()
     };
@@ -37,7 +37,7 @@ $('#register').on('click', function(){
 
 // Login user
 function login(){
-    var user = {
+    let user = {
         user_name: $("#input_username").val(),
         password: $("#input_password").val()
     };
@@ -86,6 +86,10 @@ function logout(){
 function getAllBugs(){
     completeListButton.classList.add("bg-dark");
     userListButton.classList.remove("bg-dark");
+    bugsCount = 0;
+    bugsInProcess = 0;
+    bugsFixed = 0;
+
     $.ajax({
         type: 'GET',
         url: `${URL_API}/list/${userToken}/0`,
@@ -95,6 +99,13 @@ function getAllBugs(){
             console.log('success', 'all bugs list: ', data.result.bug);
             $('#bugsList').html('');
             data.result.bug.forEach(el => {
+                bugsCount++;
+                if(el.state == 1){
+                    bugsInProcess++;
+                }
+                else if(el.state == 2){
+                    bugsFixed++;
+                }
                 var d = new Date(parseInt(el.timestamp)*1000);
                 el.timestamp = d.toLocaleString('fr-FR');
                 $('#bugsList')
@@ -117,6 +128,10 @@ function getAllBugs(){
                     '</tr>'
                 );
             });
+            console.log(bugsCount, bugsInProcess, bugsFixed);
+            $('#bugStats').html('');
+            $('#bugStats').append(`${bugsCount} bugs ${bugsInProcess > 0 ? `, ${bugsInProcess} en cours` : ''} ${bugsFixed > 0 ? `, ${bugsFixed} traités` : ''} `);
+            
         },
         error: function(error){
             console.log('error saving user', error);
@@ -128,6 +143,9 @@ function getAllBugs(){
 function getUserBugs(){
     userListButton.classList.add("bg-dark");
     completeListButton.classList.remove("bg-dark");
+    bugsCount = 0;
+    bugsInProcess = 0;
+    bugsFixed = 0;
     $.ajax({
         type: 'GET',
         url: `${URL_API}/list/${userToken}/${userId}`,
@@ -137,6 +155,13 @@ function getUserBugs(){
             console.log('success', 'user bugs list: ', data.result.bug);
              $('#bugsList').html('');
             data.result.bug.forEach(el => {
+                bugsCount++;
+                if(el.state == 1){
+                    bugsInProcess++;
+                }
+                else if(el.state == 2){
+                    bugsFixed++;
+                }
                 var d = new Date(parseInt(el.timestamp)*1000);
                 el.timestamp = d.toLocaleString('fr-FR');
                 $('#bugsList')
@@ -159,6 +184,9 @@ function getUserBugs(){
                     '</tr>'
                 );
             });
+            console.log(bugsCount, bugsInProcess, bugsFixed);
+            $('#bugStats').html('');
+            $('#bugStats').append(`${bugsCount} bugs ${bugsInProcess > 0 ? `, ${bugsInProcess} en cours` : ''} ${bugsFixed > 0 ? `, ${bugsFixed} traités` : ''} `);
         },
         error: function(error){
             console.log('error saving user', error);
