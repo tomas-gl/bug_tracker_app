@@ -102,7 +102,7 @@ function getAllBugs(){
                         `<th class="text-center">${el.timestamp}</th>`+
                         `<th class="text-center">${el.user_id}</th>`+
                         '<th class="text-center">'+
-                        '<select class="form-select mx-auto" style="width: 150px;">'+
+                        `<select class="form-select mx-auto" style="width: 150px;" name="${el.id}" onchange="editState()">`+
                             `<option ${el.state == 0 ? 'selected' : ''} value="0">Non traité</option>`+
                             `<option ${el.state == 1 ? 'selected' : ''} value="0">En cours</option>`+
                             `<option ${el.state == 2 ? 'selected' : ''} value="0">Traité</option>`+
@@ -142,7 +142,7 @@ function getUserBugs(){
                         `<th class="text-center">${el.timestamp}</th>`+
                         `<th class="text-center">${el.user_id}</th>`+
                         '<th class="text-center">'+
-                        '<select class="form-select mx-auto" style="width: 150px;">'+
+                        `<select class="form-select mx-auto" style="width: 150px;" name="${el.id}" onchange="editState()">`+
                             `<option ${el.state == 0 ? 'selected' : ''} value="0">Non traité</option>`+
                             `<option ${el.state == 1 ? 'selected' : ''} value="0">En cours</option>`+
                             `<option ${el.state == 2 ? 'selected' : ''} value="0">Traité</option>`+
@@ -185,6 +185,32 @@ function saveBug(){
         }
     })
 }
+
+// Edit a bug
+function editState(){
+    let select = this.event.target;
+    console.log(select.selectedIndex);
+    console.log(select.name);
+    $.ajax({
+        type: 'GET',
+        url: `${URL_API}/state/${userToken}/${select.name}/${select.selectedIndex}`,
+        data: { "bug_id": select.name, "new state": select.selectedIndex },
+        dataType: "json",
+        success: function(data){
+            console.log('success', data.result);
+            // if(data.result.status == "failure"){
+            //     alert("Error saving bug");
+            // }
+            // else if(data.result.status == "done"){
+            //     window.location.href="index.html"
+            // }
+        },
+        error: function(error){
+            console.log('error editing bug', error);
+        }
+    })
+}
+
 
 
 // $(function (){
