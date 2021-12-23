@@ -81,8 +81,15 @@
 
         <script>
             $(document).ready(function() {
-                var userToken = sessionStorage.getItem("userToken");
                 console.log(userToken);
+
+                fetch(`${URL_API}/ping`)
+                    .then((res) => res.json())
+                    .then(function (response) {
+                        console.log('api status', response);
+                    })
+                    .catch((error) => console.error(error));
+
 
                 // Get users list
                 $.ajax({
@@ -92,6 +99,7 @@
                     dataType: "json",
                     success: function(data){
                         console.log('success', 'all users list: ', data);
+                        userList = data.result.user;
                     },
                     error: function(error){
                         console.log('error getting users', error);

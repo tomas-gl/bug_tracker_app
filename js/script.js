@@ -1,17 +1,10 @@
 const URL_API = "http://greenvelvet.alwaysdata.net/bugTracker/api"
-var userToken = sessionStorage.getItem("userToken");
-var userId = sessionStorage.getItem("userId");
+let userToken = sessionStorage.getItem("userToken");
+let userId = sessionStorage.getItem("userId");
+let userList = [];
 
 let userListButton = document.getElementById("user_bug_list");
 let completeListButton = document.getElementById("complete_list");
-
-fetch(`${URL_API}/ping`)
-    .then((res) => res.json())
-    .then(function (response) {
-        console.log(response);
-    })
-    .catch((error) => console.error(error));
-
 
 
 $('#register').on('click', function(){
@@ -108,6 +101,13 @@ function getAllBugs(){
                 }
                 var d = new Date(parseInt(el.timestamp)*1000);
                 el.timestamp = d.toLocaleString('fr-FR');
+
+                for (let key in userList){
+                    if( el.user_id == key){
+                        el.user_id = userList[key]
+                    }
+                }
+
                 $('#bugsList')
                 .append(
                     '<tr>'+
@@ -146,6 +146,7 @@ function getUserBugs(){
     bugsCount = 0;
     bugsInProcess = 0;
     bugsFixed = 0;
+
     $.ajax({
         type: 'GET',
         url: `${URL_API}/list/${userToken}/${userId}`,
@@ -164,6 +165,13 @@ function getUserBugs(){
                 }
                 var d = new Date(parseInt(el.timestamp)*1000);
                 el.timestamp = d.toLocaleString('fr-FR');
+
+                for (let key in userList){
+                    if( el.user_id == key){
+                        el.user_id = userList[key]
+                    }
+                }
+
                 $('#bugsList')
                 .append(
                     '<tr>'+
