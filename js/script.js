@@ -2,6 +2,9 @@ const URL_API = "http://greenvelvet.alwaysdata.net/bugTracker/api"
 var userToken = sessionStorage.getItem("userToken");
 var userId = sessionStorage.getItem("userId");
 
+let userListButton = document.getElementById("user_bug_list");
+let completeListButton = document.getElementById("complete_list");
+
 fetch(`${URL_API}/ping`)
     .then((res) => res.json())
     .then(function (response) {
@@ -81,6 +84,8 @@ function logout(){
 
 // Get all bugs list
 function getAllBugs(){
+    completeListButton.classList.add("bg-dark");
+    userListButton.classList.remove("bg-dark");
     $.ajax({
         type: 'GET',
         url: `${URL_API}/list/${userToken}/0`,
@@ -108,7 +113,7 @@ function getAllBugs(){
                             `<option ${el.state == 2 ? 'selected' : ''} value="0">Traité</option>`+
                         '</select>'+
                         '</th>'+
-                        '<th class="text-center">Supprimer</th>'+
+                        `<th class="text-center" onclick="openModal()"><button class="btn btn-danger" name="${el.id}">Supprimer</button></th>`+
                     '</tr>'
                 );
             });
@@ -121,6 +126,8 @@ function getAllBugs(){
 
 // Get user bugs list
 function getUserBugs(){
+    userListButton.classList.add("bg-dark");
+    completeListButton.classList.remove("bg-dark");
     $.ajax({
         type: 'GET',
         url: `${URL_API}/list/${userToken}/${userId}`,
@@ -148,7 +155,7 @@ function getUserBugs(){
                             `<option ${el.state == 2 ? 'selected' : ''} value="0">Traité</option>`+
                         '</select>'+
                         '</th>'+
-                        '<th class="text-center">Supprimer</th>'+
+                        `<th class="text-center" onclick="openModal()"><button class="btn btn-danger" name="${el.id}">Supprimer</button></th>`+
                     '</tr>'
                 );
             });
@@ -189,8 +196,8 @@ function saveBug(){
 // Edit a bug
 function editState(){
     let select = this.event.target;
-    console.log(select.selectedIndex);
-    console.log(select.name);
+    // console.log(select.selectedIndex);
+    // console.log(select.name);
     $.ajax({
         type: 'GET',
         url: `${URL_API}/state/${userToken}/${select.name}/${select.selectedIndex}`,
@@ -198,15 +205,39 @@ function editState(){
         dataType: "json",
         success: function(data){
             console.log('success', data.result);
-            // if(data.result.status == "failure"){
-            //     alert("Error saving bug");
-            // }
-            // else if(data.result.status == "done"){
-            //     window.location.href="index.html"
-            // }
         },
         error: function(error){
             console.log('error editing bug', error);
+        }
+    })
+}
+
+// Open confirmation modal
+function openModal(){
+    let button = this.event.target;
+    let bugId = button.name;
+    let confirmModal = $('#confirm_modal');
+    confirmModal.modal('show');
+    console.log(confirmModal.find("#confirm_delete")[0]);
+    let confirmButton = confirmModal.find("#confirm_delete")[0];
+    confirmButton.setAttribute("name", bugId);
+}
+
+// Delete a bug
+function deleteBug(){
+    let bugId = this.event.target.name;
+    console.log(bugId);
+    $.ajax({
+        type: 'GET',
+        url: `${URL_API}/delete/${userToken}/${bugId}`,
+        data: bugId,
+        dataType: "json",
+        success: function(data){
+            console.log('success', data.result);
+            window.location.reload();
+        },
+        error: function(error){
+            console.log('error deleting bug', error);
         }
     })
 }

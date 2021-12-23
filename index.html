@@ -22,10 +22,10 @@
                 <div class="col-12 col-xl-6 text-center">
                     <div class="row">
                         <div class="col-6 col-md-3">
-                            <span class="w-100 bg-dark d-inline-block p-2 pointer" onclick="getAllBugs()">Liste complète</span>
+                            <span class="w-100 d-inline-block p-2 pointer" id="complete_list" onclick="getAllBugs()">Liste complète</span>
                         </div>
                         <div class="col-6 col-md-3">
-                            <span class="w-100 d-inline-block p-2 pointer" onclick="getUserBugs()">A traiter</span>
+                            <span class="w-100 d-inline-block p-2 pointer" id="user_bug_list" onclick="getUserBugs()">A traiter</span>
                         </div>
                         <div class="col-6 col-md-3 mt-2 mt-md-0">
                             <a href="add.html" class="w-100 bg-success d-inline-block p-2 text-decoration-none text-white pointer">Ajouter</a>
@@ -54,6 +54,20 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+       
+        <div class="modal fade" id="confirm_modal" tabindex="-1" aria-labelledby="confirm_modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="confirm_modalLabel">Confirmez-vous la suppression ?</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer mx-auto">
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="confirm_delete" onclick="deleteBug()">Confirmer</button>
+                </div>
+              </div>
             </div>
         </div>
 
