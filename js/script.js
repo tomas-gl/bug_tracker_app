@@ -7,26 +7,38 @@ let userListButton = document.getElementById("user_bug_list");
 let completeListButton = document.getElementById("complete_list");
 
 
-$('#register').on('click', function(){
+// Register user
+function register(){
     let user = {
         user_name: $("#input_username").val(),
         password: $("#input_password").val()
     };
-
-    $.ajax({
-        type: 'GET',
-        url: `${URL_API}/signup/${user.user_name}/${user.password}`,
-        data: user,
-        dataType: "json",
-        success: function(data){
-            console.log('success', data);
-            window.location.href="index.html"
-        },
-        error: function(error){
-            console.log('error saving user', error);
-        }
-    })
-})
+        if ($('#input_password').val() == $('#confirm_password').val()) {
+        $.ajax({
+            type: 'GET',
+            url: `${URL_API}/signup/${user.user_name}/${user.password}`,
+            data: user,
+            dataType: "json",
+            success: function(data){
+                console.log('success', data);
+                sessionStorage.setItem("userToken", data.result.token);
+                sessionStorage.setItem("userId", data.result.id);
+                window.location.href="index.html"
+            },
+            error: function(error){
+                console.log('error saving user', error);
+                $("#register-error2").removeClass("d-none");
+                $("#register-error2").addClass("d-block");
+                $("#register-error1").addClass("d-none");
+                $("#register-error1").removeClass("d-block");
+            }
+        })
+        } else 
+        $("#register-error1").removeClass("d-none");
+        $("#register-error1").addClass("d-block");
+        $("#register-error2").addClass("d-none");
+        $("#register-error2").removeClass("d-block");
+}
 
 // Login user
 function login(){
@@ -45,7 +57,10 @@ function login(){
             sessionStorage.setItem("userToken", data.result.token);
             sessionStorage.setItem("userId", data.result.id);
             if(data.result.status == "failure"){
-                alert("Nom d'utilisateur ou mot de passe incorrect");
+                $("#login-error1").removeClass("d-none");
+                $("#login-error1").addClass("d-block");
+                $("#login-error2").addClass("d-none");
+                $("#login-error2").removeClass("d-block");
             }
             else if(data.result.status == "done"){
                 window.location.href="index.html"
@@ -53,6 +68,10 @@ function login(){
         },
         error: function(error){
             console.log('error login user', error);
+            $("#login-error2").removeClass("d-none");
+            $("#login-error2").addClass("d-block");
+            $("#login-error1").addClass("d-none");
+            $("#login-error1").removeClass("d-block");
         }
     })
 }

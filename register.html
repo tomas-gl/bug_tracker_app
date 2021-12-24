@@ -26,11 +26,13 @@
                             <label for="input_password" class="form-label">Mot de passe</label>
                             <input type="password" class="form-control" id="input_password">
                         </div>
-                        <!-- <div class="mb-3">
-                            <label for="input-password" class="form-label">Retapez le mot de passe</label>
-                            <input type="password" class="form-control" id="input-password">
-                        </div> -->
-                        <button id="register" type="button" class="btn btn-info d-block mx-auto m-3">S'inscrire</button>
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Retapez le mot de passe</label>
+                            <input type="password" class="form-control" id="confirm_password">
+                        </div>
+                        <span id="register-error1" class="text-danger d-none">Les mots de passe ne correspondent pas</span> 
+                        <span id="register-error2" class="text-danger d-none">Veuillez remplir les champs</span> 
+                        <button type="button" class="btn btn-info d-block mx-auto m-3" onclick="register()">S'inscrire</button>
                         <a href="login.html" class="d-block text-center text-white">Se connecter</a>
                     </form>
                 </div>
