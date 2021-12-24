@@ -147,7 +147,6 @@ function getAllBugs(){
                     '</tr>'
                 );
             });
-            console.log(bugsCount, bugsInProcess, bugsFixed);
             $('#bugStats').html('');
             $('#bugStats').append(`${bugsCount} bugs ${bugsInProcess > 0 ? `, ${bugsInProcess} en cours` : ''} ${bugsFixed > 0 ? `, ${bugsFixed} traités` : ''} `);
             
@@ -211,7 +210,6 @@ function getUserBugs(){
                     '</tr>'
                 );
             });
-            console.log(bugsCount, bugsInProcess, bugsFixed);
             $('#bugStats').html('');
             $('#bugStats').append(`${bugsCount} bugs ${bugsInProcess > 0 ? `, ${bugsInProcess} en cours` : ''} ${bugsFixed > 0 ? `, ${bugsFixed} traités` : ''} `);
         },
@@ -223,11 +221,12 @@ function getUserBugs(){
 
 // Save a bug
 function saveBug(){
-    var bugData = {
+
+    let bugData = {
         title: $("#input_titre").val(),
         description: $("#input_description").val()
     };
-    console.log(bugData);
+
     $.ajax({
         type: 'POST',
         url: `${URL_API}/add/${userToken}/${userId}`,
@@ -251,8 +250,6 @@ function saveBug(){
 // Edit a bug
 function editState(){
     let select = this.event.target;
-    // console.log(select.selectedIndex);
-    // console.log(select.name);
     $.ajax({
         type: 'GET',
         url: `${URL_API}/state/${userToken}/${select.name}/${select.selectedIndex}`,
@@ -279,7 +276,6 @@ function openModal(){
     let bugId = button.name;
     let confirmModal = $('#confirm_modal');
     confirmModal.modal('show');
-    console.log(confirmModal.find("#confirm_delete")[0]);
     let confirmButton = confirmModal.find("#confirm_delete")[0];
     confirmButton.setAttribute("name", bugId);
 }
@@ -287,7 +283,6 @@ function openModal(){
 // Delete a bug
 function deleteBug(){
     let bugId = this.event.target.name;
-    console.log(bugId);
     $.ajax({
         type: 'GET',
         url: `${URL_API}/delete/${userToken}/${bugId}`,
@@ -302,16 +297,3 @@ function deleteBug(){
         }
     })
 }
-
-
-
-// $(function (){
-
-//     $.ajax({
-//         type: 'GET',
-//         url: `${URL_API}/ping`,
-//         success: function(data){
-//             console.log('success', data);
-//         }
-//     })
-// })
