@@ -227,24 +227,30 @@ function saveBug(){
         description: $("#input_description").val()
     };
 
-    $.ajax({
-        type: 'POST',
-        url: `${URL_API}/add/${userToken}/${userId}`,
-        data: JSON.stringify( { "title": bugData.title, "description": bugData.description }),
-        dataType: "json",
-        success: function(data){
-            console.log('success', data.result.status);
-            if(data.result.status == "failure"){
-                alert("Error saving bug");
+    if($("#input_titre").val() == "" || $("#input_description").val() == ""){
+        $("#add-error").removeClass("d-none");
+        $("#add-error").addClass("d-block");
+    }
+    else{
+        $.ajax({
+            type: 'POST',
+            url: `${URL_API}/add/${userToken}/${userId}`,
+            data: JSON.stringify( { "title": bugData.title, "description": bugData.description }),
+            dataType: "json",
+            success: function(data){
+                console.log('success', data.result.status);
+                if(data.result.status == "failure"){
+                    alert("Error saving bug");
+                }
+                else if(data.result.status == "done"){
+                    window.location.href="index.html"
+                }
+            },
+            error: function(error){
+                console.log('error saving bug', error);
             }
-            else if(data.result.status == "done"){
-                window.location.href="index.html"
-            }
-        },
-        error: function(error){
-            console.log('error saving bug', error);
-        }
-    })
+        })
+    }
 }
 
 // Edit a bug
